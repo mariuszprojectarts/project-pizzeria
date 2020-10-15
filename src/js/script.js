@@ -59,8 +59,10 @@
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
-      thisProduct.initAccordion();
       thisProduct.getElements();
+      thisProduct.initAccordion();
+      thisProduct.initOrderForm();
+      thisProduct.processOrder();
 
       // console.log('new Product:', thisProduct);
     }
@@ -106,7 +108,7 @@
 
       /* find the clickable trigger (the element that should react to clicking) */
 
-      const clickableTigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      const clickableTigger = thisProduct.accordionTrigger /// ???? do weryfikacji czy dobrze
 
       /* START: click event listener to trigger */
 
@@ -148,6 +150,51 @@
       });
 
 
+    }
+
+    initOrderForm() {
+      const thisProduct = this;
+      console.log(initOrderform); // nie działa
+
+      thisProduct.form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        thisProduct.precessOrder();
+      });
+
+      for (let input of thisProduct.formInputs) {
+        input.addEventListener('change', function () {
+          thisProduct.processOrder();
+        })
+      }
+      thisProduct.cartButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+    }
+
+    processOrder() {
+      const thisProduct = this;
+      console.log(initOrderform); // nie działa
+
+      const formData = utils.serializeFormToObject(thisProduct.form)
+      console.log('formData', formData);
+
+      let price = thisProduct.data.price;
+
+      /* do dokończenia 
+ 
+       for (paramID in thisProduct.data.price) {
+ 
+         const param = thisProduct.data.params;
+ 
+         for (let optionID in param.option)
+         
+       }
+       */
+
+
+
+      price = thisProduct.priceElem
     }
 
   }
