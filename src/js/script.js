@@ -86,7 +86,7 @@
 
       const menuContainer = document.querySelector(select.containerOf.menu);
 
-      console.log('menuContainer:', menuContainer);
+      //console.log('menuContainer:', menuContainer);
 
       // add element to menu
 
@@ -101,6 +101,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion() {
@@ -155,7 +156,6 @@
     initOrderForm() {
       const thisProduct = this;
 
-
       thisProduct.form.addEventListener('submit', function (event) {
         event.preventDefault();
         thisProduct.processOrder();
@@ -180,22 +180,31 @@
 
       // save in variable price 
       let price = thisProduct.data.price;
+      console.log(price);
 
-      //create const with all params
-      const params = thisProduct.data.params; /// undefined ?????
-      console.log(params);
+
+      //save const with all params
+      const params = thisProduct.data.params;
+      //console.log(params);
+
+
 
       //start loop for each elements params 
-      for (paramId of params) {
+      for (let paramId in params) {
+        //console.log(paramId);
 
         // save in const each param
-        const param = paramId;
+        const options = params[paramId].options;
+        //console.log(options);
+
 
         // start second loop for each option
-        for (let optionId of param.option) {
-
+        for (let optionId in options) {
+          // debugger;
           //save each option
           const option = optionId;
+          //console.log(optionId);
+
 
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
 
@@ -203,18 +212,37 @@
           if (!option.default && optionSelected) {
 
             //add option price to let price
-            price += option.price;
+            price += option[optionId].price;
 
             // end first IF and start second IF option was not select and option is default
           } else if (option.default && !optionSelected) {
 
             //reduce price option from let price 
-            price -= option.price;
+            price -= option[optionId].price;
+
           }
+
+          /* Images
+          
+          const images = thisProduct.imageWrapper; 
+
+          const allImages = images.querySelectorAll(`.${paramId}-${optionId}`);
+
+          if (optionSelected) {
+            for (let image of allImages) {
+              image.classList.add(classNames.menuProduct.imageVisible);
+            }
+          } else {
+            for (let image of allImages) {
+              image.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
+          */
+
         }
       }
       // set this productc price with variable price 
-      thisProduct.priceElem = price;
+      thisProduct.priceElem.innerHTML = price;
     }
 
   }
