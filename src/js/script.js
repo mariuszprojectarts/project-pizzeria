@@ -33,20 +33,20 @@
     },
   };
 
-  const classNames = {
-    menuProduct: {
-      wrapperActive: 'active',
-      imageVisible: 'active',
-    },
-  };
+  // const classNames = {
+  //   menuProduct: {
+  //     wrapperActive: 'active',
+  //     imageVisible: 'active',
+  //   },
+  // };
 
-  const settings = {
-    amountWidget: {
-      defaultValue: 1,
-      defaultMin: 1,
-      defaultMax: 9,
-    }
-  };
+  // const settings = {
+  //   amountWidget: {
+  //     defaultValue: 1,
+  //     defaultMin: 1,
+  //     defaultMax: 9,
+  //   }
+  // };
 
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
@@ -84,7 +84,7 @@
 
       // find menu container   -> <div id="product-list" class="product-list container"></div>
 
-      const menuContainer = document.querySelector(select.containerOf.menu);   // ?????? do wyjaśnienia co właściwie szuka
+      const menuContainer = document.querySelector(select.containerOf.menu);
 
       console.log('menuContainer:', menuContainer);
 
@@ -108,7 +108,7 @@
 
       /* find the clickable trigger (the element that should react to clicking) */
 
-      const clickableTigger = thisProduct.accordionTrigger /// ???? do weryfikacji czy dobrze
+      const clickableTigger = thisProduct.accordionTrigger; /// ???? do weryfikacji czy dobrze
 
       /* START: click event listener to trigger */
 
@@ -124,7 +124,7 @@
 
         /* find all active products */
 
-        const activeProducts = document.querySelectorAll('.product .active');
+        const activeProducts = document.querySelectorAll('.product.active');
 
 
         /* START LOOP: for each active product */
@@ -137,7 +137,7 @@
 
             /* remove class active for the active product */
 
-            activeProduct.classList.remove('active')
+            activeProduct.classList.remove('active');
 
             /* END: if the active product isn't the element of thisProduct */
           }
@@ -154,17 +154,17 @@
 
     initOrderForm() {
       const thisProduct = this;
-      console.log(initOrderform); // nie działa
+
 
       thisProduct.form.addEventListener('submit', function (event) {
         event.preventDefault();
-        thisProduct.precessOrder();
+        thisProduct.processOrder();
       });
 
       for (let input of thisProduct.formInputs) {
         input.addEventListener('change', function () {
           thisProduct.processOrder();
-        })
+        });
       }
       thisProduct.cartButton.addEventListener('click', function (event) {
         event.preventDefault();
@@ -174,27 +174,47 @@
 
     processOrder() {
       const thisProduct = this;
-      console.log(initOrderform); // nie działa
 
-      const formData = utils.serializeFormToObject(thisProduct.form)
-      console.log('formData', formData);
+      //read all data from the form utils.serializeFormToObject      
+      const formData = utils.serializeFormToObject(thisProduct.form);
 
+      // save in variable price 
       let price = thisProduct.data.price;
 
-      /* do dokończenia 
- 
-       for (paramID in thisProduct.data.price) {
- 
-         const param = thisProduct.data.params;
- 
-         for (let optionID in param.option)
-         
-       }
-       */
+      //create const with all params
+      const params = thisProduct.data.params; /// undefined ?????
+      console.log(params);
 
+      //start loop for each elements params 
+      for (paramId of params) {
 
+        // save in const each param
+        const param = paramId;
 
-      price = thisProduct.priceElem
+        // start second loop for each option
+        for (let optionId of param.option) {
+
+          //save each option
+          const option = optionId;
+
+          const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
+
+          // start IF option is selected & option is not default
+          if (!option.default && optionSelected) {
+
+            //add option price to let price
+            price += option.price;
+
+            // end first IF and start second IF option was not select and option is default
+          } else if (option.default && !optionSelected) {
+
+            //reduce price option from let price 
+            price -= option.price;
+          }
+        }
+      }
+      // set this productc price with variable price 
+      thisProduct.priceElem = price;
     }
 
   }
