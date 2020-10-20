@@ -33,20 +33,20 @@
     },
   };
 
-  // const classNames = {
-  //   menuProduct: {
-  //     wrapperActive: 'active',
-  //     imageVisible: 'active',
-  //   },
-  // };
+  const classNames = {
+    menuProduct: {
+      wrapperActive: 'active',
+      imageVisible: 'active',
+    },
+  };
 
-  // const settings = {
-  //   amountWidget: {
-  //     defaultValue: 1,
-  //     defaultMin: 1,
-  //     defaultMax: 9,
-  //   }
-  // };
+  const settings = {
+    amountWidget: {
+      defaultValue: 1,
+      defaultMin: 1,
+      defaultMax: 9,
+    }
+  };
 
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
@@ -62,9 +62,11 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      // thisProduct.initAmountWidget(); // 8.7 widget ilości
       thisProduct.processOrder();
 
-      // console.log('new Product:', thisProduct);
+
+      console.log('new Product:', thisProduct);
     }
 
     renderInMenu() {
@@ -102,6 +104,7 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      // thisProduct.amountWidgetElem = select.menuProduct.amountWidget; // 8.7 widget ilości
     }
 
     initAccordion() {
@@ -212,32 +215,32 @@
           if (!option.default && optionSelected) {
 
             //add option price to let price
-            price += option[optionId].price;
+            price += options[optionId].price;
 
             // end first IF and start second IF option was not select and option is default
           } else if (option.default && !optionSelected) {
 
             //reduce price option from let price 
-            price -= option[optionId].price;
+            price -= options[optionId].price;
 
           }
 
-          /* Images
-          
-          const images = thisProduct.imageWrapper; 
+          // /* Img */
 
-          const allImages = images.querySelectorAll(`.${paramId}-${optionId}`);
+          // const images = thisProduct.imageWrapper;
 
-          if (optionSelected) {
-            for (let image of allImages) {
-              image.classList.add(classNames.menuProduct.imageVisible);
-            }
-          } else {
-            for (let image of allImages) {
-              image.classList.remove(classNames.menuProduct.imageVisible);
-            }
-          }
-          */
+          // const allImages = images.querySelectorAll(`.${paramId}-${optionId}`);
+
+          // if (optionSelected) {
+          //   for (let image of allImages) {
+          //     image.classList.add(classNames.menuProduct.imageVisible);
+          //   }
+          // } else {
+          //   for (let image of allImages) {
+          //     image.classList.remove(classNames.menuProduct.imageVisible);
+          //   }
+          // }
+
 
         }
       }
@@ -245,7 +248,36 @@
       thisProduct.priceElem.innerHTML = price;
     }
 
+    // // 8.7 widget ilości
+    // initAmountWidget() {
+
+    //   const thisProduct = this;
+
+    //   thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+    // }
+
   }
+  // 8.7 widget ilości
+  // class AmountWidget {
+  //   constructor(element) {
+  //     const thisWidget = this;
+
+  //     thisWidget.getElements(element);
+
+  //     console.log('AmountWidget:', thisWidget);
+  //     console.log('constuctor arguments:', element);
+  //   }
+
+  //   getElements(element) {
+
+  //     const thisWidget = this;
+
+  //     thisWidget.element = element;
+  //     thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+  //     thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+  //     thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+  //   }
+  // }
 
   const app = {
 
@@ -270,11 +302,11 @@
 
     init: function () {
       const thisApp = this;
-      // console.log('*** App starting ***');
-      // console.log('thisApp:', thisApp);
-      // console.log('classNames:', classNames);
-      // console.log('settings:', settings);
-      // console.log('templates:', templates);
+      console.log('*** App starting ***');
+      console.log('thisApp:', thisApp);
+      console.log('classNames:', classNames);
+      console.log('settings:', settings);
+      console.log('templates:', templates);
 
       thisApp.initData();
       thisApp.initMenu();
