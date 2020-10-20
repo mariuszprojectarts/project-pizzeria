@@ -225,21 +225,21 @@
 
           }
 
-          // /* Img */
+          /* Img */
 
-          // const images = thisProduct.imageWrapper;
+          const images = thisProduct.imageWrapper;
 
-          // const allImages = images.querySelectorAll(`.${paramId}-${optionId}`);
+          const allImages = images.querySelectorAll(`.${paramId}-${optionId}`);
 
-          // if (optionSelected) {
-          //   for (let image of allImages) {
-          //     image.classList.add(classNames.menuProduct.imageVisible);
-          //   }
-          // } else {
-          //   for (let image of allImages) {
-          //     image.classList.remove(classNames.menuProduct.imageVisible);
-          //   }
-          // }
+          if (optionSelected) {
+            for (let image of allImages) {
+              image.classList.add(classNames.menuProduct.imageVisible);
+            }
+          } else {
+            for (let image of allImages) {
+              image.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
 
 
         }
