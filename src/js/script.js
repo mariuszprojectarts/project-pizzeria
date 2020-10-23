@@ -104,7 +104,7 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-      thisProduct.amountWidgetElem = select.menuProduct.amountWidget;
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAccordion() {
@@ -178,10 +178,10 @@
     processOrder() {
       const thisProduct = this;
 
-      //read all data from the form utils.serializeFormToObject      
+      //read all data from the form utils.serializeFormToObject
       const formData = utils.serializeFormToObject(thisProduct.form);
 
-      // save in variable price 
+      // save in variable price
       let price = thisProduct.data.price;
       console.log(price);
 
@@ -192,7 +192,7 @@
 
 
 
-      //start loop for each elements params 
+      //start loop for each elements params
       for (let paramId in params) {
         //console.log(paramId);
 
@@ -220,7 +220,7 @@
             // end first IF and start second IF option was not select and option is default
           } else if (option.default && !optionSelected) {
 
-            //reduce price option from let price 
+            //reduce price option from let price
             price -= options[optionId].price;
 
           }
@@ -247,7 +247,7 @@
       //multiply price by ammount
       price *= thisProduct.amountWidget.value;
 
-      // set this productc price with variable price 
+      // set this productc price with variable price
       thisProduct.priceElem.innerHTML = price;
     }
 
@@ -257,7 +257,9 @@
       const thisProduct = this;
 
       thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
-      thisProduct.amountWidgetElem.addEventListener('updated', thisProduct.processOrder());
+      thisProduct.amountWidgetElem.addEventListener('updated', () => {
+        thisProduct.processOrder();
+      });
     }
 
   }
@@ -266,10 +268,9 @@
     constructor(element) {
       const thisWidget = this;
 
-      thisWidget.value.settings.amountWidgetElem.defaultValue;
-      thisWidget.setValue(thisWidget.input.value);
       thisWidget.getElements(element);
-
+      thisWidget.setValue((thisWidget.input.value) ? thisWidget.input.value : settings.amountWidget.defaultValue);
+      thisWidget.initActions();
       console.log('AmountWidget:', thisWidget);
       console.log('constuctor arguments:', element);
     }
@@ -288,28 +289,37 @@
       const thisWidget = this;
       const newValue = parseInt(value);
 
-      // TODO: Add validation 
-
-
-      if (newValue != thisWidget.input || newValue > settings.amountWidget.defaultMin || newValue < settings.amountWidget.defaultMax) {
+      // TODO: Add validatio
+      if (newValue != thisWidget.value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
         thisWidget.value = newValue;
         thisWidget.announce();
       }
 
       thisWidget.input.value = thisWidget.value;
+
     }
 
     initActions() {
       const thisWidget = this;
-      thisWidget.input.addEventListener('change', this.setValue());
-      thisWidget.linkDecrease.addEventListener('click', this.setValue(thisWidget.value - 1));
-      thisWidget.linkIncrease.addEventListener('click', this.setValue(thisWidget.value + 1));
+      thisWidget.input.addEventListener('change', (e) => {
+        e.preventDefault();
+        this.setValue(thisWidget.input.value);
+      });
+      thisWidget.linkDecrease.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.setValue(thisWidget.value - 1);
+      });
+      thisWidget.linkIncrease.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.setValue(thisWidget.value + 1);
+      });
+
     }
 
     announce() {
       const thisWidget = this;
 
-      const event = new Event('updated');
+      const event = new Event('click', { detail: { test: 'test' } });
       thisWidget.element.dispatchEvent(event);
     }
 
