@@ -146,7 +146,7 @@
 
       /* find the clickable trigger (the element that should react to clicking) */
 
-      const clickableTigger = thisProduct.accordionTrigger; /// ???? do weryfikacji czy dobrze
+      const clickableTigger = thisProduct.accordionTrigger;
 
       /* START: click event listener to trigger */
 
@@ -206,6 +206,7 @@
       thisProduct.cartButton.addEventListener('click', function (event) {
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
 
@@ -214,6 +215,8 @@
 
       //read all data from the form utils.serializeFormToObject
       const formData = utils.serializeFormToObject(thisProduct.form);
+
+      thisProduct.params = {};
 
       // save in variable price
       let price = thisProduct.data.price;
@@ -228,6 +231,9 @@
 
       //start loop for each elements params
       for (let paramId in params) {
+
+        const param = params[paramId];
+
         //console.log(paramId);
 
         // save in const each param
@@ -239,7 +245,7 @@
         for (let optionId in options) {
           // debugger;
           //save each option
-          const option = optionId;
+          const option = options[optionId];
           //console.log(optionId);
 
 
@@ -265,7 +271,28 @@
 
           const allImages = images.querySelectorAll(`.${paramId}-${optionId}`);
 
+
+
+
           if (optionSelected) {
+
+
+
+            if (!thisProduct.params[paramId]) {
+
+              // console.log('param', param);
+              // console.log('params', params);
+              // //console.log('paramlabel', param.label);
+              //console.log('params[paramId]label', params[paramId].label);
+
+              thisProduct.params[paramId] = {
+                label: param.label,
+                options: {},
+              };
+            }
+
+            thisProduct.params[paramId].options[optionId] = option.label;
+
             for (let image of allImages) {
               image.classList.add(classNames.menuProduct.imageVisible);
             }
@@ -274,17 +301,17 @@
               image.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
-
-
         }
       }
       //multiply price by ammount
-      price *= thisProduct.amountWidget.value;
+      thisProduct.priceSingle = price;
+      thisProduct.price = thisProduct.priceSingle * thisProduct.amountWidget.value;
 
       // set this productc price with variable price
-      thisProduct.priceElem.innerHTML = price;
-    }
+      thisProduct.priceElem.innerHTML = thisProduct.price;
+      // console.log('params', thisProduct.params);
 
+    }
 
     initAmountWidget() {
 
@@ -296,6 +323,14 @@
       });
     }
 
+    addToCart() {
+      const thisProduct = this;
+
+      thisProduct.name = thisProduct.data.name;
+      thisProduct.amount = thisProduct.amountWidget.value;
+
+      app.cart.add(thisProduct);
+    }
   }
 
   class AmountWidget {
@@ -367,7 +402,7 @@
       thisCart.products = [];
       thisCart.getElements(element);
       thisCart.initActions();
-      console.log('new cart', thisCart);
+      //console.log('new cart', thisCart);
     }
 
     getElements(element) {
@@ -376,6 +411,7 @@
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
 
     }
 
@@ -385,6 +421,24 @@
       thisCart.dom.toggleTrigger.addEventListener('click', () => {
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
+
+    }
+
+    add(menuProduct) {
+      const thisCart = this;
+
+      //generate HTML
+
+      const generatedHTML = templates.cartProduct(menuProduct);
+      console.log('generatedHTML', generatedHTML);
+
+      // generate DOM element
+
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+
+      // add dom element to the cart
+
+      thisCart.dom.productList.appendChild(generatedDOM);
 
     }
 
