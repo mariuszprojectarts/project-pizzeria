@@ -9,10 +9,6 @@
         "sourceType": "module"
     },
     "rules": {
-        "indent": [
-            "error",
-            2
-        ],
         "linebreak-style": [
             "off"
         ],
@@ -30,5 +26,8 @@
         "no-console": [
             "off"
         ]
+    },
+    "globals": {
+        "Handlebars": true
     }
 }

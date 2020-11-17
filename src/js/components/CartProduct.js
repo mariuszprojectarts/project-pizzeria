@@ -1,5 +1,5 @@
-import { select } from './settings.js';
-import AmountWidget from './components/AmountWidget.js';
+import { select } from '../settings.js';
+import AmountWidget from './AmountWidget.js';
 
 class CartProduct {
   constructor(menuProduct, element) {
@@ -81,7 +81,7 @@ class CartProduct {
       params: thisCartProduct.params,
     };
     // eslint-disable-next-line indent
-    }
+  }
 }
 
 export default CartProduct;
