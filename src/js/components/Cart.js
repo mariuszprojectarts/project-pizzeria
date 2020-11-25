@@ -115,9 +115,7 @@ class Cart {
       products: [],
     };
 
-    const products = thisCart.products;
-
-    for (let product of products) {
+    for (let product of thisCart.products) {
       payload.products.push(product.getData());
     }
 

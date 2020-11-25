@@ -40,6 +40,10 @@
   @include flex(row, flex-start, flex-start);
   bottom: ($base-size * -8);
 
+  .order {
+    background-image: url();
+  }
+
   a {
     @extend .h2;
     color: $color-main;
