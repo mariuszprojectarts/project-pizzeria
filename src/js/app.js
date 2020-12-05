@@ -100,6 +100,7 @@ const app = {
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();
+    thisApp.initHomePage();
   },
 
   initCart: function () {
@@ -123,6 +124,13 @@ const app = {
     thisApp.bookingContainer = document.querySelector(select.containerOf.booking);
     thisApp.booking = new Booking(thisApp.bookingContainer);
   },
+
+  initHomePage: function () {
+
+    new Flickity('.main-carousel', {
+      
+    });
+  }
 };
 
 app.init();
