@@ -244,7 +244,7 @@ class Booking {
     
                 thisBooking.selectedTables.push(clickedTableId);
 
-                thisBooking.makeBooked(thisBooking.datePicker.value, thisBooking.dom.hourPicker.output.innerHTML, parseInt(thisBooking.dom.hoursAmount.input.value), parseInt(clickedTableId));
+                thisBooking.makeBooked(thisBooking.datePicker.value, thisBooking.hourPicker.value, thisBooking.hoursAmount.value, parseInt(clickedTableId));
               }
     
               console.log('selectedTables', thisBooking.selectedTables);
